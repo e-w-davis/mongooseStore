@@ -4,7 +4,7 @@ const express = require("express");
 const app = express();
 const product = require('./models/products');
 require('dotenv').config();
-const PORT = process.env.PORT;
+
 
 
 
@@ -36,6 +36,7 @@ const PORT = process.env.PORT;
 //S(how)
 
 // tell application to listen for requests
+const PORT = process.env.PORT;
 
 app.listen(PORT, () => {
     console.log(`Listening on port: ${PORT}`)
