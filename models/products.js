@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const productSchema = new mongoose.Schema({
-    name: { type: String, required: true },
+    name: { type: String, required: true ,
     description: String,
     img: String,
     price: { type: Number, 
@@ -13,7 +13,7 @@ const productSchema = new mongoose.Schema({
         required: [ true, 'Quantity required'],
         min: [0, 'Minimum quantity is zero'], 
     },
-});
+}});
 
 const Product = mongoose.model('Product', productSchema);
 

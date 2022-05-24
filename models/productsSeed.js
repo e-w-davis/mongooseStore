@@ -1,5 +1,6 @@
-module.exports = [
-    {
+const res = require("express/lib/response")
+
+module.exports = [{
         name: 'Beans',
         description: 'A small pile of beans. Buy more beans for a big pile of beans.',
         img: 'https://imgur.com/LEHS8h3.png',
@@ -18,4 +19,7 @@ module.exports = [
         price: 7000,
         qty: 1
     }
-]
+],
+(error, data) => {
+    res.redirect('/products');
+};
