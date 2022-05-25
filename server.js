@@ -1,8 +1,8 @@
 // require dependencies in our file
 
 const express = require("express");
+const Products = require('./models/products.js');
 const app = express();
-const Product = require('./models/products');
 require('dotenv').config();
 const mongoose = require('mongoose');
 
@@ -20,12 +20,12 @@ db.on('disconnected', () => console.log('mongo disconnected'));
 app.use(express.urlencoded({ extended: true }));
 
 // Seed
-const productSeed = require('./models/productsSeed.js');
+const productsSeed = require('./models/productsSeed.js');
 
 app.get('/products/seed', (req, res) => {
-    Product.deleteMany({}, (error, allProducts) => {});
+    // Products.deleteMany({}, (error, allProducts) => {});
 
-    Product.create(productSeed, (error, data) => {
+    Products.create(productsSeed, (error, data) => {
         res.redirect('/products');
     });
 });
@@ -34,7 +34,7 @@ app.get('/products/seed', (req, res) => {
 
 //I(ndex)
 app.get('/products', (req, res) => {
-    Product.find({}, (error, allProducts) => {
+    Products.find({}, (error, allProducts) => {
         res.render('index.ejs', {
             products: allProducts,
         });
@@ -51,13 +51,24 @@ app.get('/products/new', (req, res) => {
 //U(pdate)
 
 //C(reate)
+app.post('/products', (req, res) => {
+    if (req.body.completed === 'on') {
+        req.body.completed = true;
+    } else {
+        req.body.completed = false;
+    }
+    
+    Products.create(req.body, (error, createdBook) => {
+        res.redirect('/products');
+    });
+});
 
 //E(dit)
 
 //S(how)
 app.get('/products/:id', (req, res) => {
-    Product.findById(req.params.id, (err, foundProduct) => {
-        res.render(show.ejs, {
+    Products.findById(req.params.id, (err, foundProduct) => {
+        res.render('show.ejs', {
             product: foundProduct,
         });
     });
