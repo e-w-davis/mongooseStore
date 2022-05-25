@@ -1,10 +1,9 @@
-// require dependencies in our file
-
 const express = require("express");
-const Products = require('./models/products.js');
+const Product = require("./models/products.js");
 const app = express();
 require('dotenv').config();
 const mongoose = require('mongoose');
+const methodOverride = require("method-override")
 
 mongoose.connect(process.env.DATABASE_URL, {
 	useNewUrlParser: true,
@@ -18,14 +17,16 @@ db.on('disconnected', () => console.log('mongo disconnected'));
 
 // mount our middleware
 app.use(express.urlencoded({ extended: true }));
+app.use(methodOverride("_method"));
 
 // Seed
-const productsSeed = require('./models/productsSeed.js');
+const productsSeed = require('./models/productsSeed');
+
 
 app.get('/products/seed', (req, res) => {
     // Products.deleteMany({}, (error, allProducts) => {});
 
-    Products.create(productsSeed, (error, data) => {
+    Product.create(productsSeed, (error, data) => {
         res.redirect('/products');
     });
 });
@@ -34,9 +35,9 @@ app.get('/products/seed', (req, res) => {
 
 //I(ndex)
 app.get('/products', (req, res) => {
-    Products.find({}, (error, allProducts) => {
+    Product.find({}, (error, allProducts) => {
         res.render('index.ejs', {
-            products: allProducts,
+            product: allProducts,
         });
     });
 });
@@ -47,27 +48,45 @@ app.get('/products/new', (req, res) => {
 });
 
 //D(elete)
+app.delete("/products/:id", (req, res) => {
+    Product.findByIdAndRemove(req.params.id, (err, data) => {
+        res.redirect("/products")
+    })
+})
 
 //U(pdate)
+app.put("/products/:id", (req, res) => {
+    Product.findByIdAndUpdate(
+        req.params.id,
+        req.body,
+        {
+            new: true,
+        },
+        (error, updatedProduct) => {
+            res.redirect(`/products/${req.params.id}`)
+        }
+    )
+})
 
 //C(reate)
-app.post('/products', (req, res) => {
-    if (req.body.completed === 'on') {
-        req.body.completed = true;
-    } else {
-        req.body.completed = false;
-    }
-    
-    Products.create(req.body, (error, createdBook) => {
+app.post('/products', (req, res) => {  
+    Product.create(req.body, (error, createdProduct) => {
         res.redirect('/products');
     });
 });
 
 //E(dit)
+    app.get("/products/:id/edit", (req, res) => {
+        Product.findById(req.params.id, (error, foundProduct) => {
+            res.render("edit.ejs", {
+                product: foundProduct,
+        })
+    })
+})
 
 //S(how)
 app.get('/products/:id', (req, res) => {
-    Products.findById(req.params.id, (err, foundProduct) => {
+    Product.findById(req.params.id, (err, foundProduct) => {
         res.render('show.ejs', {
             product: foundProduct,
         });

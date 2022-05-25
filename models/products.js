@@ -2,8 +2,8 @@ const mongoose = require('mongoose');
 
 const productSchema = new mongoose.Schema({
     name: { type: String, required: true },
-    description: { String, },
-    img: { String, },
+    description: { type: String, },
+    img: { type: String, },
     price: { type: Number, 
         // https://javascript.plainenglish.io/store-clean-data-by-validating-models-with-mongoose-f6453dbdbff9
         // required: [ true, 'Quantity required'],

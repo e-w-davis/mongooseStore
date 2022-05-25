@@ -17,8 +17,4 @@ module.exports = [{
         price: 7000,
         qty: 1
     },
-],
-
-(error, data) => {
-    res.redirect('/products');
-};
+];
