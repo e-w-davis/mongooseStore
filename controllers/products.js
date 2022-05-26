@@ -38,6 +38,17 @@ router.delete("/products/:id", (req, res) => {
 })
 
 //U(pdate)
+router.put("/products/:id/buy", (req, res) => {
+    Product.findByIdAndUpdate(
+        req.params.id,
+        req.body,
+        {
+            new: true,
+        },
+        DBhandler.CreateResult()
+    )
+})
+
 router.put("/products/:id", (req, res) => {
     Product.findByIdAndUpdate(
         req.params.id,
@@ -50,7 +61,6 @@ router.put("/products/:id", (req, res) => {
         }
     )
 })
-
 //C(reate)
 router.post('/products', (req, res) => {  
     Product.create(req.body, (error, createdProduct) => {

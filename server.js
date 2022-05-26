@@ -18,7 +18,7 @@ db.on('disconnected', () => console.log('mongo disconnected'));
 // mount our middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
-
+app.use(express.static('public'))
 app.use(productsController);
 // tell application to listen for requests
 const PORT = process.env.PORT;
